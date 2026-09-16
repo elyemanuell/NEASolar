@@ -1,0 +1,392 @@
+import zipfile, os, re, textwrap, shutil
+
+src = "/mnt/data/9b15e295-7880-4fdd-bcb0-8cc426b911dc.zip"
+outdir = "/mnt/data/NEASolar_v2"
+os.makedirs(outdir, exist_ok=True)
+
+# Read original files as the starting point.
+with zipfile.ZipFile(src) as z:
+    original = {name: z.read(name).decode("utf-8") for name in ["index.html", "styles.css", "app.js"]}
+
+html = r'''<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEASolar | Energía solar y gestión energética</title>
+<meta name="description" content="NEASolar desarrolla soluciones de energía solar y gestión energética para hogares, comercios, industrias y establecimientos rurales.">
+<meta name="theme-color" content="#071312">
+<meta name="robots" content="index,follow">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+<header class="site-header" id="inicio">
+  <div class="container header-inner">
+    <a class="brand" href="#inicio" aria-label="NEASolar, inicio">
+      <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span>NEA<span>Solar</span></span>
+    </a>
+
+    <nav class="nav" aria-label="Navegación principal">
+      <a href="#soluciones">Soluciones</a>
+      <a href="#metodo">Proceso</a>
+      <a href="#empresa">Empresa</a>
+      <a href="#faq">Preguntas</a>
+    </nav>
+
+    <a class="button button-small button-outline js-whatsapp" href="#" target="_blank" rel="noopener noreferrer">
+      Solicitar relevamiento
+    </a>
+    <button class="menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobile-nav">
+      <span></span><span></span>
+    </button>
+  </div>
+
+  <nav class="mobile-nav container" id="mobile-nav" aria-label="Navegación móvil">
+    <a href="#soluciones">Soluciones</a>
+    <a href="#metodo">Proceso</a>
+    <a href="#empresa">Empresa</a>
+    <a href="#faq">Preguntas</a>
+    <a class="js-whatsapp" href="#" target="_blank" rel="noopener noreferrer">Hablar con NEASolar</a>
+  </nav>
+</header>
+
+<main id="contenido">
+
+<section class="hero">
+  <div class="hero-glow" aria-hidden="true"></div>
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow"><span></span> Energía inteligente para el NEA</p>
+      <h1>La energía de tu empresa también puede <em>evolucionar.</em></h1>
+      <p class="hero-text">
+        Analizamos cómo consumís energía, diseñamos la solución adecuada y proyectamos el camino hacia una instalación más eficiente y sostenible.
+      </p>
+      <div class="hero-actions">
+        <a class="button button-primary js-whatsapp" href="#" target="_blank" rel="noopener noreferrer">
+          Solicitar un relevamiento <b>↗</b>
+        </a>
+        <a class="text-link" href="#soluciones">Conocer soluciones <span>↓</span></a>
+      </div>
+      <div class="hero-proof">
+        <div><strong>01</strong><span>Analizar</span></div>
+        <div><strong>02</strong><span>Diseñar</span></div>
+        <div><strong>03</strong><span>Implementar</span></div>
+      </div>
+    </div>
+
+    <div class="hero-visual" aria-label="Visualización conceptual de generación solar, almacenamiento y consumo" role="img">
+      <div class="visual-orbit orbit-one"></div>
+      <div class="visual-orbit orbit-two"></div>
+      <div class="sun-core"><span>kWh</span></div>
+      <div class="visual-card card-generation"><small>GENERACIÓN</small><strong>+ energía solar</strong><span class="mini-line"></span></div>
+      <div class="visual-card card-storage"><small>ALMACENAMIENTO</small><strong>Respaldo inteligente</strong><span class="battery-bars"><i></i><i></i><i></i><i></i></span></div>
+      <div class="visual-card card-monitor"><small>MONITOREO</small><strong>Datos en tiempo real</strong><span class="pulse">●</span></div>
+      <div class="panel-field" aria-hidden="true">
+        <span></span><span></span><span></span><span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="statement">
+  <div class="container statement-grid">
+    <p class="eyebrow dark"><span></span> Nuestro enfoque</p>
+    <h2>No empezamos por el panel. <strong>Empezamos por entender la energía.</strong></h2>
+    <p>Una solución solar tiene sentido cuando responde a un consumo real, una necesidad concreta y un proyecto bien dimensionado.</p>
+  </div>
+</section>
+
+<section class="solutions section" id="soluciones">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow dark"><span></span> Soluciones</p>
+        <h2>Una plataforma energética,<br><strong>no solo una instalación.</strong></h2>
+      </div>
+      <p>Desde el primer relevamiento hasta el seguimiento posterior, construimos soluciones que puedan crecer con cada proyecto.</p>
+    </div>
+
+    <div class="solution-grid">
+      <article class="solution-card featured">
+        <div class="card-number">01</div>
+        <div class="solution-icon">⌁</div>
+        <h3>Gestión y diagnóstico energético</h3>
+        <p>Relevamiento de consumos, análisis de facturación, identificación de oportunidades y base técnica para tomar decisiones.</p>
+        <span class="card-arrow">↗</span>
+      </article>
+
+      <article class="solution-card">
+        <div class="card-number">02</div>
+        <div class="solution-icon">◫</div>
+        <h3>Generación solar</h3>
+        <p>Diseño de sistemas On-Grid, Off-Grid e híbridos según consumo, disponibilidad solar y objetivo del proyecto.</p>
+        <span class="card-arrow">↗</span>
+      </article>
+
+      <article class="solution-card">
+        <div class="card-number">03</div>
+        <div class="solution-icon">↯</div>
+        <h3>Aplicaciones rurales</h3>
+        <p>Bombeo y soluciones energéticas para establecimientos donde la red eléctrica no alcanza o no es la opción adecuada.</p>
+        <span class="card-arrow">↗</span>
+      </article>
+
+      <article class="solution-card">
+        <div class="card-number">04</div>
+        <div class="solution-icon">◌</div>
+        <h3>Monitoreo y posventa</h3>
+        <p>Seguimiento del rendimiento, mantenimiento y análisis para conservar el valor del sistema durante su vida útil.</p>
+        <span class="card-arrow">↗</span>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="process section" id="metodo">
+  <div class="container">
+    <div class="section-head light">
+      <div>
+        <p class="eyebrow"><span></span> Método NEASolar</p>
+        <h2>Del dato a la <em>decisión.</em></h2>
+      </div>
+      <p>Un proceso claro para reducir incertidumbre antes de invertir.</p>
+    </div>
+
+    <div class="process-grid">
+      <div class="process-item">
+        <span>01</span><div><h3>Relevamiento</h3><p>Consumo, equipos, hábitos de uso y condiciones del sitio.</p></div>
+      </div>
+      <div class="process-item">
+        <span>02</span><div><h3>Análisis</h3><p>Convertimos los datos en información útil para detectar oportunidades.</p></div>
+      </div>
+      <div class="process-item">
+        <span>03</span><div><h3>Diseño</h3><p>Dimensionamos la alternativa técnica acorde al objetivo del proyecto.</p></div>
+      </div>
+      <div class="process-item">
+        <span>04</span><div><h3>Implementación</h3><p>Coordinamos la ejecución, protecciones, puesta en marcha y documentación.</p></div>
+      </div>
+      <div class="process-item">
+        <span>05</span><div><h3>Seguimiento</h3><p>Medimos el desempeño y acompañamos la evolución de la instalación.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="company section" id="empresa">
+  <div class="container company-grid">
+    <div class="company-visual">
+      <div class="coordinate">NEA / ARGENTINA</div>
+      <div class="energy-circle"><span>NEA<br><b>SOLAR</b></span></div>
+      <div class="coordinate bottom">ENERGY SYSTEMS · 01</div>
+    </div>
+    <div class="company-copy">
+      <p class="eyebrow dark"><span></span> La empresa</p>
+      <h2>Construimos una empresa energética con <em>visión regional.</em></h2>
+      <p>
+        NEASolar nace con una mirada técnica y empresarial: comenzar cerca del cliente, conocer sus necesidades y desarrollar soluciones que puedan escalar.
+      </p>
+      <p>
+        El objetivo no es vender una tecnología aislada, sino integrar diagnóstico, diseño, implementación, monitoreo y servicio en una misma experiencia.
+      </p>
+      <div class="company-facts">
+        <div><strong>NEA</strong><span>Base regional</span></div>
+        <div><strong>FV</strong><span>Energía fotovoltaica</span></div>
+        <div><strong>DATA</strong><span>Análisis energético</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="coverage">
+  <div class="container coverage-inner">
+    <div>
+      <p class="eyebrow"><span></span> Desde Virasoro</p>
+      <h2>Una mirada local.<br><em>Una visión regional.</em></h2>
+    </div>
+    <p>Comenzamos en Gobernador Virasoro y alrededores, con proyección hacia Corrientes, Misiones y el Nordeste Argentino.</p>
+  </div>
+</section>
+
+<section class="faq section" id="faq">
+  <div class="container faq-grid">
+    <div>
+      <p class="eyebrow dark"><span></span> Preguntas frecuentes</p>
+      <h2>Antes de invertir,<br><strong>entendé tu proyecto.</strong></h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">¿Tengo que comprar paneles para empezar? <span>+</span></button>
+        <div class="faq-answer"><p>No. El primer paso puede ser un relevamiento energético. A partir de los datos se evalúa qué solución tiene sentido.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">¿Trabajan con sistemas On-Grid y Off-Grid? <span>+</span></button>
+        <div class="faq-answer"><p>Sí. También podemos evaluar alternativas híbridas y aplicaciones específicas según las condiciones del proyecto.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">¿Atienden comercios y establecimientos rurales? <span>+</span></button>
+        <div class="faq-answer"><p>Sí. El análisis se adapta al tipo de instalación, su consumo, horarios de funcionamiento y necesidades energéticas.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">¿Puedo comenzar solo con mi factura de electricidad? <span>+</span></button>
+        <div class="faq-answer"><p>Sí. La factura aporta información inicial valiosa para conocer consumo y costos antes de avanzar con un relevamiento más completo.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="container cta-inner">
+    <p class="eyebrow"><span></span> Primer paso</p>
+    <h2>¿Querés saber qué puede hacer la energía solar por tu instalación?</h2>
+    <p>Contanos qué necesitás. Empezamos por los datos y construimos la solución a partir de ahí.</p>
+    <a class="button button-primary js-whatsapp" href="#" target="_blank" rel="noopener noreferrer">Hablar con NEASolar <b>↗</b></a>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-top">
+    <a class="brand footer-brand" href="#inicio"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span>NEA<span>Solar</span></span></a>
+    <div class="footer-links">
+      <a href="#soluciones">Soluciones</a>
+      <a href="#metodo">Proceso</a>
+      <a href="#empresa">Empresa</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <a class="footer-contact js-whatsapp" href="#" target="_blank" rel="noopener noreferrer">WhatsApp ↗</a>
+  </div>
+  <div class="container footer-bottom">
+    <span>Soluciones de energía solar y gestión energética</span>
+    <span>© <span id="year"></span> NEASolar</span>
+  </div>
+</footer>
+
+<a class="whatsapp-float js-whatsapp" href="#" target="_blank" rel="noopener noreferrer" aria-label="Contactar a NEASolar por WhatsApp">WA</a>
+
+<script src="app.js" defer></script>
+</body>
+</html>
+'''
+
+css = r''':root{
+  --ink:#071312; --ink-2:#10211f; --paper:#f4f3ed; --paper-2:#ebeae3;
+  --muted:#68736f; --line:#d9dbd3; --green:#a8e56b; --green-2:#c7f39a;
+  --white:#fff; --max:1180px; --sans:"DM Sans",system-ui,sans-serif;
+  --display:"Manrope",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.6}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.035;background-image:radial-gradient(#071312 .6px,transparent .6px);background-size:5px 5px;z-index:100}
+a{color:inherit}
+.container{width:min(var(--max),calc(100% - 48px));margin:auto}
+.skip-link{position:absolute;left:-9999px}.skip-link:focus{left:20px;top:20px;background:#fff;padding:10px;z-index:999}
+.site-header{position:sticky;top:0;z-index:50;background:rgba(7,19,18,.94);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.08);color:#fff}
+.header-inner{height:76px;display:flex;align-items:center;gap:30px}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none;font-family:var(--display);font-size:1.2rem;font-weight:800;letter-spacing:-.04em;white-space:nowrap}
+.brand>span:last-child span{color:var(--green)}
+.brand-mark{position:relative;width:26px;height:26px;display:block}
+.brand-mark i{position:absolute;bottom:1px;width:5px;border-radius:4px;background:var(--green);transform:skew(-18deg)}
+.brand-mark i:nth-child(1){height:10px;left:2px}.brand-mark i:nth-child(2){height:17px;left:10px}.brand-mark i:nth-child(3){height:24px;left:18px}
+.nav{display:flex;justify-content:center;gap:30px;flex:1}
+.nav a,.mobile-nav a{font-size:.88rem;color:#c7d0cc;text-decoration:none;transition:.2s}
+.nav a:hover,.mobile-nav a:hover{color:#fff}
+.button{display:inline-flex;align-items:center;justify-content:center;gap:14px;text-decoration:none;font-weight:700;font-size:.9rem;border-radius:3px;padding:15px 20px;transition:transform .2s,background .2s,color .2s}
+.button:hover{transform:translateY(-2px)}
+.button-small{padding:10px 16px;font-size:.78rem}
+.button-outline{border:1px solid rgba(255,255,255,.28);color:#fff}.button-outline:hover{background:#fff;color:var(--ink)}
+.button-primary{background:var(--green);color:var(--ink)}.button-primary:hover{background:var(--green-2)}
+.button b{font-size:1rem}
+.menu-toggle{display:none;margin-left:auto;background:none;border:0;padding:10px}.menu-toggle span{display:block;width:23px;height:2px;background:#fff;margin:5px}
+.mobile-nav{display:none;padding-bottom:18px}.mobile-nav a{display:block;padding:10px 0;border-top:1px solid rgba(255,255,255,.08)}
+.hero{position:relative;overflow:hidden;background:var(--ink);color:#fff;min-height:700px;display:flex;align-items:center}
+.hero-glow{position:absolute;width:650px;height:650px;border-radius:50%;right:-260px;top:-220px;background:radial-gradient(circle,rgba(168,229,107,.16),transparent 67%)}
+.hero-grid{display:grid;grid-template-columns:1.02fr .98fr;gap:70px;align-items:center;padding:92px 0}
+.eyebrow{display:flex;align-items:center;gap:10px;text-transform:uppercase;letter-spacing:.16em;font-size:.68rem;font-weight:700;color:#b8c5c0;margin:0 0 22px}.eyebrow span{display:inline-block;width:25px;height:1px;background:var(--green)}.eyebrow.dark{color:#65716d}
+.hero h1,.section h2,.statement h2,.coverage h2,.cta h2{font-family:var(--display);letter-spacing:-.055em;line-height:1.03;margin:0}
+.hero h1{font-size:clamp(3rem,6vw,5.35rem);max-width:780px}.hero h1 em,.coverage h2 em,.cta h2 em{color:var(--green);font-style:normal}
+.hero-text{max-width:590px;color:#b7c2be;font-size:1.08rem;margin:28px 0 34px}
+.hero-actions{display:flex;align-items:center;gap:28px;flex-wrap:wrap}.text-link{color:#fff;text-decoration:none;font-size:.9rem}.text-link span{color:var(--green);margin-left:8px}
+.hero-proof{display:flex;gap:0;margin-top:74px;border-top:1px solid rgba(255,255,255,.13);max-width:560px}.hero-proof div{display:flex;gap:12px;align-items:center;padding:17px 30px 0 0;margin-right:30px;border-right:1px solid rgba(255,255,255,.1)}.hero-proof div:last-child{border:0}.hero-proof strong{font-family:var(--display);color:var(--green);font-size:.8rem}.hero-proof span{font-size:.76rem;color:#aab5b1;text-transform:uppercase;letter-spacing:.08em}
+.hero-visual{position:relative;height:520px;max-width:540px;justify-self:end;width:100%}
+.visual-orbit{position:absolute;border:1px solid rgba(168,229,107,.18);border-radius:50%;left:50%;top:45%;transform:translate(-50%,-50%)}.orbit-one{width:430px;height:430px}.orbit-two{width:300px;height:300px;border-style:dashed}
+.sun-core{position:absolute;left:50%;top:45%;transform:translate(-50%,-50%);width:120px;height:120px;border:1px solid rgba(168,229,107,.6);border-radius:50%;display:grid;place-items:center;background:rgba(168,229,107,.07);box-shadow:0 0 80px rgba(168,229,107,.12)}.sun-core:after{content:"";position:absolute;width:8px;height:8px;background:var(--green);border-radius:50%;top:13px;right:21px}.sun-core span{font-family:var(--display);font-size:1.2rem;font-weight:800}
+.visual-card{position:absolute;background:rgba(17,34,32,.88);border:1px solid rgba(255,255,255,.13);padding:17px 19px;min-width:190px;box-shadow:0 20px 60px rgba(0,0,0,.18)}.visual-card small{display:block;color:#81908a;font-size:.58rem;letter-spacing:.16em;margin-bottom:6px}.visual-card strong{font-family:var(--display);font-size:.8rem}.card-generation{top:8%;left:2%}.card-storage{bottom:11%;left:8%}.card-monitor{right:0;top:52%}.mini-line{display:block;height:2px;background:linear-gradient(90deg,var(--green),transparent);margin-top:12px}.battery-bars{display:flex;gap:3px;margin-top:11px}.battery-bars i{width:20px;height:4px;background:var(--green);opacity:.35}.battery-bars i:nth-child(-n+3){opacity:1}.pulse{color:var(--green);font-size:.65rem;margin-left:8px}
+.panel-field{position:absolute;bottom:3%;right:8%;display:grid;grid-template-columns:repeat(3,34px);gap:4px;transform:perspective(180px) rotateX(48deg) rotateZ(-13deg);opacity:.7}.panel-field span{height:22px;border:1px solid rgba(168,229,107,.5);background:rgba(168,229,107,.04)}
+.statement{padding:110px 0;background:var(--paper-2)}.statement-grid{display:grid;grid-template-columns:1fr 2fr;gap:30px}.statement h2{font-size:clamp(2.4rem,5vw,4.2rem);max-width:820px}.statement h2 strong{font-weight:700}.statement-grid>p:last-child{grid-column:2;max-width:570px;color:var(--muted);font-size:1.02rem;margin:0}
+.section{padding:120px 0}.section-head{display:grid;grid-template-columns:1.5fr .7fr;gap:50px;align-items:end;margin-bottom:55px}.section-head h2{font-size:clamp(2.5rem,5vw,4.1rem)}.section-head h2 strong{font-weight:700}.section-head>p{color:var(--muted);max-width:390px;margin:0}
+.solution-grid{display:grid;grid-template-columns:repeat(2,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}.solution-card{position:relative;min-height:330px;padding:34px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);transition:.25s}.solution-card:hover{background:#fff;transform:translateY(-3px)}.solution-card.featured{background:var(--ink);color:#fff}.solution-card.featured:hover{background:#0c2421}.card-number{font-size:.68rem;letter-spacing:.15em;color:#7a8581}.featured .card-number{color:var(--green)}.solution-icon{font-size:2rem;margin:65px 0 22px;color:#78917f}.featured .solution-icon{color:var(--green)}.solution-card h3{font-family:var(--display);font-size:1.35rem;letter-spacing:-.03em;margin:0 0 10px}.solution-card p{color:var(--muted);font-size:.9rem;max-width:420px;margin:0}.featured p{color:#aebcb6}.card-arrow{position:absolute;right:30px;bottom:28px;color:var(--green);font-size:1.25rem}
+.process{background:var(--ink);color:#fff}.section-head.light>p{color:#8f9e98}.process-grid{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid rgba(255,255,255,.13)}.process-item{padding:28px 22px 15px 0;border-right:1px solid rgba(255,255,255,.1);margin-right:22px}.process-item:last-child{border-right:0}.process-item>span{font-size:.7rem;color:var(--green);letter-spacing:.12em}.process-item h3{font-family:var(--display);font-size:1rem;margin:48px 0 9px}.process-item p{font-size:.82rem;color:#94a19d;max-width:180px;margin:0}
+.company{background:#fff}.company-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:90px;align-items:center}.company-visual{height:470px;background:var(--ink);position:relative;overflow:hidden}.company-visual:before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,transparent 48%,rgba(168,229,107,.08) 49%,transparent 50%)}.energy-circle{position:absolute;width:280px;height:280px;border:1px solid rgba(168,229,107,.45);border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%);display:grid;place-items:center;color:#fff;text-align:center;font-family:var(--display);font-size:1.1rem;letter-spacing:.12em}.energy-circle:before,.energy-circle:after{content:"";position:absolute;border:1px solid rgba(255,255,255,.1);border-radius:50%}.energy-circle:before{inset:25px}.energy-circle:after{inset:-25px}.energy-circle b{color:var(--green);font-size:1.35rem}.coordinate{position:absolute;top:22px;left:24px;color:#778681;font-size:.6rem;letter-spacing:.16em}.coordinate.bottom{top:auto;bottom:22px;left:auto;right:24px}.company-copy h2{font-size:clamp(2.5rem,4.5vw,4rem)}.company-copy h2 em{color:#64856b;font-style:normal}.company-copy>p:not(.eyebrow){color:var(--muted);max-width:610px}.company-facts{display:flex;gap:35px;border-top:1px solid var(--line);margin-top:40px;padding-top:23px}.company-facts div{display:grid;gap:3px}.company-facts strong{font-family:var(--display);font-size:1.1rem}.company-facts span{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.coverage{background:var(--ink-2);color:#fff;padding:105px 0}.coverage-inner{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:end}.coverage h2{font-size:clamp(2.8rem,5vw,4.3rem)}.coverage-inner>p{color:#9aa9a4;max-width:450px;margin:0;font-size:1rem}
+.faq-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:100px}.faq h2{font-size:clamp(2.4rem,4.5vw,3.7rem)}.faq-list{border-top:1px solid var(--line)}.faq-item{border-bottom:1px solid var(--line)}.faq-question{width:100%;background:none;border:0;text-align:left;display:flex;justify-content:space-between;gap:20px;padding:23px 0;font:600 .98rem var(--sans);color:var(--ink);cursor:pointer}.faq-question span{color:#6c8b70;font-size:1.3rem;transition:.2s}.faq-question[aria-expanded=true] span{transform:rotate(45deg)}.faq-answer{max-height:0;overflow:hidden;transition:max-height .25s ease}.faq-answer p{color:var(--muted);font-size:.9rem;margin:0;padding:0 35px 23px 0}
+.cta{background:var(--ink);color:#fff;padding:110px 0}.cta-inner{max-width:900px}.cta h2{font-size:clamp(2.7rem,5vw,4.5rem);max-width:850px}.cta p:not(.eyebrow){color:#9eaca7;max-width:600px;margin:25px 0 32px}.site-footer{background:#050e0d;color:#91a09b;padding:35px 0 20px}.footer-top{display:flex;align-items:center;justify-content:space-between;gap:30px;padding-bottom:35px;border-bottom:1px solid rgba(255,255,255,.1)}.footer-links{display:flex;gap:25px}.footer-links a,.footer-contact{font-size:.78rem;text-decoration:none;color:#aab5b1}.footer-contact{color:var(--green)}.footer-bottom{display:flex;justify-content:space-between;gap:20px;padding-top:20px;font-size:.68rem;color:#65736e}
+.whatsapp-float{position:fixed;right:22px;bottom:22px;z-index:40;width:56px;height:56px;border-radius:50%;display:grid;place-items:center;text-decoration:none;background:#25d366;color:#fff;font:700 .68rem var(--display);box-shadow:0 10px 35px rgba(0,0,0,.22);transition:.2s}.whatsapp-float:hover{transform:translateY(-3px) scale(1.03)}
+@media(max-width:900px){.nav{display:none}.header-inner>.button{display:none}.menu-toggle{display:block}.mobile-nav.open{display:block}.hero-grid,.company-grid,.faq-grid{grid-template-columns:1fr}.hero{min-height:auto}.hero-visual{justify-self:center;max-width:600px;height:430px}.statement-grid{grid-template-columns:1fr}.statement-grid>p:last-child{grid-column:auto}.section-head,.coverage-inner{grid-template-columns:1fr;gap:25px}.process-grid{grid-template-columns:1fr 1fr}.process-item{border-right:0;border-bottom:1px solid rgba(255,255,255,.1);padding-bottom:25px}.company-visual{height:390px}.faq-grid{gap:55px}}
+@media(max-width:620px){.container{width:min(var(--max),calc(100% - 32px))}.header-inner{height:68px}.hero-grid{padding:65px 0}.hero h1{font-size:clamp(2.7rem,14vw,4rem)}.hero-text{font-size:.98rem}.hero-proof{margin-top:50px}.hero-proof div{margin-right:13px;padding-right:13px}.hero-proof span{font-size:.62rem}.hero-visual{height:350px}.orbit-one{width:280px;height:280px}.orbit-two{width:200px;height:200px}.sun-core{width:90px;height:90px}.visual-card{min-width:145px;padding:12px}.visual-card strong{font-size:.68rem}.card-generation{left:0}.card-monitor{right:0}.panel-field{right:0}.statement,.section,.cta{padding:80px 0}.statement h2,.section-head h2{font-size:2.5rem}.solution-grid{grid-template-columns:1fr}.solution-card{min-height:285px}.solution-icon{margin-top:48px}.process-grid{grid-template-columns:1fr}.company-grid{gap:45px}.company-visual{height:330px}.energy-circle{width:210px;height:210px}.company-facts{gap:18px}.coverage{padding:80px 0}.faq h2{font-size:2.5rem}.footer-top,.footer-bottom{flex-direction:column;align-items:flex-start}.footer-links{flex-wrap:wrap}.whatsapp-float{right:15px;bottom:15px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.button,.solution-card,.whatsapp-float{transition:none}}
+'''
+
+js = r'''// NEASolar — interacción de interfaz
+const WHATSAPP_NUMBER = "5493756000000"; // Reemplazar por el número real antes de publicar.
+const WHATSAPP_MESSAGE = "Hola, quiero solicitar un relevamiento energético con NEASolar.";
+
+function whatsappLink() {
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
+}
+
+document.querySelectorAll(".js-whatsapp").forEach((el) => {
+  el.setAttribute("href", whatsappLink());
+});
+
+const yearEl = document.getElementById("year");
+if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+document.querySelectorAll(".faq-question").forEach((button) => {
+  button.addEventListener("click", () => {
+    const expanded = button.getAttribute("aria-expanded") === "true";
+    const answer = button.nextElementSibling;
+    button.setAttribute("aria-expanded", String(!expanded));
+    answer.style.maxHeight = expanded ? null : `${answer.scrollHeight}px`;
+  });
+});
+
+const menuToggle = document.querySelector(".menu-toggle");
+const mobileNav = document.querySelector(".mobile-nav");
+
+if (menuToggle && mobileNav) {
+  menuToggle.addEventListener("click", () => {
+    const open = menuToggle.getAttribute("aria-expanded") === "true";
+    menuToggle.setAttribute("aria-expanded", String(!open));
+    mobileNav.classList.toggle("open", !open);
+  });
+
+  mobileNav.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
+      menuToggle.setAttribute("aria-expanded", "false");
+      mobileNav.classList.remove("open");
+    });
+  });
+}
+'''
+
+for name, content in {"index.html":html,"styles.css":css,"app.js":js}.items():
+    with open(os.path.join(outdir,name),"w",encoding="utf-8") as f:
+        f.write(content)
+
+zip_out = "/mnt/data/NEASolar_v2_profesional.zip"
+with zipfile.ZipFile(zip_out, "w", zipfile.ZIP_DEFLATED) as z:
+    for name in ["index.html","styles.css","app.js"]:
+        z.write(os.path.join(outdir,name), arcname=name)
+
+print(f"Proyecto actualizado creado: {zip_out}")
+print("Incluye: index.html, styles.css y app.js")
